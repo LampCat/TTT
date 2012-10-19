@@ -56,6 +56,7 @@ main()
 new Team[MAX_PLAYERS];
 new InMap[MAX_PLAYERS];
 new MapPlaying = 0;
+new AdminLevel[MAX_PLAYERS];
 
 new Text3D:OverHeadText[MAX_PLAYERS];
 new Text:TextdrawGetingReady;
@@ -92,7 +93,7 @@ new Float:RandomSpawns[][] =
 public OnGameModeInit()
 {
 	// Don't use these lines if it's a filterscript
-	SetGameModeText("TTT 1.2.7 Indev");
+	SetGameModeText("TTT 1.2.9 Indev");
 	AllowInteriorWeapons(1);
 	EnableStuntBonusForAll(0);
 	SetNameTagDrawDistance(30.0);
@@ -159,10 +160,16 @@ public OnPlayerRequestClass(playerid, classid)
 public OnPlayerConnect(playerid)
 {
     
-    new string[64], pName[MAX_PLAYER_NAME];
+    new string[64], pName[MAX_PLAYER_NAME], plrIP[16];
     GetPlayerName(playerid,pName,MAX_PLAYER_NAME);
     format(string,sizeof string,"%s joined the game.",pName);
     SendClientMessageToAll(0xFFFFFFAA,string);
+    GetPlayerIp(playerid, plrIP, sizeof(plrIP));
+    if(!strcmp(plrIP, "127.0.0.1"))
+	{
+	AdminLevel[playerid] = 5;
+	}
+	
 	
 	return 1;
 }
@@ -263,55 +270,6 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	SetTimer("StartRound", 20000, false);
 	return 1;
     }
-	if (strcmp("/spawn", cmdtext, true, 10) == 0)
-	{
-	    SetPlayerPos(playerid, 2220.26,-1148.01,1025.80);
-	    SetPlayerInterior(playerid, 15);
-		return 1;
-	}
-	if (strcmp("/det", cmdtext, true, 10) == 0)
-	{
-	/*
-		OverHeadText[playerid] = Create3DTextLabel("Detective", 0x0b03ffFF, 30.0, 40.0, 50.0, 40.0, 0);
-        Attach3DTextLabelToPlayer(OverHeadText[playerid], playerid, 0.0, 0.0, 0.3);
-		SendClientMessage(playerid, 0x0b03ffFF, "You are now a detective.");
-		TextDrawHideForPlayer(playerid, TextdrawGetingReady);
-	    TextDrawHideForPlayer(playerid, TextdrawInnocent);
-	    TextDrawHideForPlayer(playerid, TextdrawTraitor);
-		
-		TextDrawShowForPlayer(playerid, TextdrawDetictive);
-		Team[playerid] = Detective;
-		*/
-		SwitchPlayerTeam(playerid, 1);
-		return 1;
-	}
-	if (strcmp("/traitor", cmdtext, true, 10) == 0)
-	{
-	   /*
-		TextDrawHideForPlayer(playerid, TextdrawGetingReady);
-	    TextDrawHideForPlayer(playerid, TextdrawDetictive);
-	    TextDrawHideForPlayer(playerid, TextdrawInnocent);
-		
-	    TextDrawShowForPlayer(playerid, TextdrawTraitor);
-		Team[playerid] = Traitor;
-		*/
-		SwitchPlayerTeam(playerid, 3);
-	    return 1;
-	}
-	
-	if (strcmp("/inn", cmdtext, true, 10) == 0)
-	{
-	    /*
-		TextDrawHideForPlayer(playerid, TextdrawGetingReady);
-	    TextDrawHideForPlayer(playerid, TextdrawDetictive);
-	    TextDrawHideForPlayer(playerid, TextdrawTraitor);
-		
-	    TextDrawShowForPlayer(playerid, TextdrawInnocent);
-		Team[playerid] = Innocent;
-		*/
-		SwitchPlayerTeam(playerid, 2);
-	    return 1;
-	}
 	if (strcmp("/me", cmdtext, true, 10) == 0)
 	{
 	switch(Team[playerid])
@@ -533,7 +491,6 @@ foreach(Player, i)
 	SwitchPlayerTeam(i, random(sizeof(RandomTeam)));
 }
 Game = 1;
-//Add a foreach here for the Team choseing And check if there are more then two player Online.
 }
 
 // TickRate: 1 second.
