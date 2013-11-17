@@ -32,20 +32,7 @@ main()
 }
 
 #endif
-/*
-  ----How Karma/Score Works----
-  as a innocent and you kill a detactive -%22
-  as a innocent and you kill a another innocent -%15
-  as a innocent and you killa a traitor +25%
-  as a detactive and you kill a innocent -%11
-  as a detactive and you killa a traitor +%26
-  as a traitor and you kill a another traitor -%13
-  as a traitor and you kill a innocent +%24
-  as a traitor and you kill a detactive +%26
-  
-  
 
-*/
 
 
 //Teams Detective, Traitor, Innocent
